@@ -1,6 +1,7 @@
-// Fetch API wrapper with built-in mock interceptors for local development
+// Fetch API wrapper with optional mock interceptors for local development
 
-const BASE_URL = '/api';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const USE_REAL_NETWORK = import.meta.env.VITE_USE_REAL_NETWORK === 'true';
 
 // Parse fetch responses gracefully
 async function parseResponse(response) {
@@ -183,26 +184,28 @@ const mockEndpoints = {
 // Main Fetch Client Object
 export const client = {
   get: async (path) => {
-    // Intercept path and check for mock matching
-    const mockKey = `GET:${path.split('?')[0]}`;
-    
-    // Check dynamic ID patterns: /checkout/sessions/:id -> match prefix
-    if (path.startsWith('/checkout/sessions/') && !path.endsWith('/payment-methods')) {
-      const parts = path.split('/');
-      const id = parts[parts.length - 1];
-      return await mockEndpoints[`GET:/checkout/sessions/`](path, id);
+    if (!USE_REAL_NETWORK) {
+      // Intercept path and check for mock matching
+      const mockKey = `GET:${path.split('?')[0]}`;
+      
+      // Check dynamic ID patterns: /checkout/sessions/:id -> match prefix
+      if (path.startsWith('/checkout/sessions/') && !path.endsWith('/payment-methods')) {
+        const parts = path.split('/');
+        const id = parts[parts.length - 1];
+        return await mockEndpoints[`GET:/checkout/sessions/`](path, id);
+      }
+
+      // Match exact match keys (sorted by length descending to match specific endpoints before generic ones)
+      const matchKey = Object.keys(mockEndpoints)
+        .sort((a, b) => b.length - a.length)
+        .find(key => key.startsWith('GET:') && path.includes(key.replace('GET:', '')));
+      
+      if (matchKey) {
+        return await mockEndpoints[matchKey](path);
+      }
     }
 
-    // Match exact match keys (sorted by length descending to match specific endpoints before generic ones)
-    const matchKey = Object.keys(mockEndpoints)
-      .sort((a, b) => b.length - a.length)
-      .find(key => key.startsWith('GET:') && path.includes(key.replace('GET:', '')));
-    
-    if (matchKey) {
-      return await mockEndpoints[matchKey](path);
-    }
-
-    // Standard HTTP Request fallback
+    // Standard HTTP Request
     try {
       const response = await fetch(`${BASE_URL}${path}`, {
         method: 'GET',
@@ -213,6 +216,9 @@ export const client = {
       });
       return await parseResponse(response);
     } catch (e) {
+      if (USE_REAL_NETWORK) {
+        throw e;
+      }
       console.warn('Real API failed. Falling back to local mock interceptor.', e.message);
       // If server doesn't respond, run mock as fallback
       if (path.includes('/payment-methods')) {
@@ -223,16 +229,18 @@ export const client = {
   },
 
   post: async (path, body = {}) => {
-    // Check dynamic mock interceptors (sorted by length descending to match specific endpoints before generic ones)
-    const matchKey = Object.keys(mockEndpoints)
-      .sort((a, b) => b.length - a.length)
-      .find(key => key.startsWith('POST:') && path.includes(key.replace('POST:', '')));
-    
-    if (matchKey) {
-      return await mockEndpoints[matchKey](path, body);
+    if (!USE_REAL_NETWORK) {
+      // Check dynamic mock interceptors (sorted by length descending to match specific endpoints before generic ones)
+      const matchKey = Object.keys(mockEndpoints)
+        .sort((a, b) => b.length - a.length)
+        .find(key => key.startsWith('POST:') && path.includes(key.replace('POST:', '')));
+      
+      if (matchKey) {
+        return await mockEndpoints[matchKey](path, body);
+      }
     }
 
-    // Standard HTTP Request fallback
+    // Standard HTTP Request
     try {
       const response = await fetch(`${BASE_URL}${path}`, {
         method: 'POST',
@@ -244,6 +252,9 @@ export const client = {
       });
       return await parseResponse(response);
     } catch (e) {
+      if (USE_REAL_NETWORK) {
+        throw e;
+      }
       console.warn('Real POST failed. Falling back to local mock.', e.message);
       // Match endpoints manually
       if (path.includes('/contact')) {
