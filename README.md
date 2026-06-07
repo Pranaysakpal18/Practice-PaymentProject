@@ -1,7 +1,7 @@
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
+This project also supports a real network mode for API practice. Set `VITE_USE_REAL_NETWORK=true` in your `.env` file and optionally override `VITE_API_BASE_URL` if your backend is not mounted at `/api`.
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
