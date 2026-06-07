@@ -1,0 +1,283 @@
+@import './variables';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-sans;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: $transition-fast;
+  font-weight: 500;
+  
+  &:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+  }
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+// App shell structure
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+  width: 100%;
+  
+  @media (max-width: $bp-md) {
+    padding: 0.75rem;
+    align-items: flex-start;
+  }
+}
+
+.checkout-wrapper {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  width: 100%;
+  max-width: 1050px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-premium);
+  overflow: hidden;
+  min-height: 600px;
+  transition: $transition-normal;
+  
+  @media (max-width: $bp-lg) {
+    grid-template-columns: 320px 1fr;
+  }
+  
+  @media (max-width: $bp-md) {
+    grid-template-columns: 1fr;
+    max-width: 550px;
+    border-radius: var(--radius-lg);
+  }
+}
+
+// Form and visual steps components
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 2.25rem;
+  background: var(--bg-card);
+  min-height: 100%;
+  position: relative;
+  
+  @media (max-width: $bp-sm) {
+    padding: 1.25rem;
+  }
+}
+
+// Steps wrapper animation
+.step-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+  
+  .step-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 1.75rem;
+  }
+}
+
+// Keyframes
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Form Elements
+.form-group {
+  margin-bottom: 1.25rem;
+  text-align: left;
+  
+  label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 0.375rem;
+  }
+  
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-input);
+  color: var(--text-heading);
+  transition: $transition-fast;
+  outline: none;
+  
+  &::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+  
+  &:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light-bg);
+  }
+  
+  &.is-invalid {
+    border-color: var(--danger);
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    }
+  }
+}
+
+.error-message {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--danger);
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+// Buttons
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 550;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: $transition-fast;
+  outline: none;
+  gap: 0.5rem;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--primary-light-bg);
+    border-color: var(--border-hover);
+  }
+}
+
+.btn-block {
+  width: 100%;
+}
+
+// Loading Spinner
+.spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Navigation and Bottom utilities
+.step-nav-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px dashed var(--border-color);
+  
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: $transition-fast;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    
+    &:hover {
+      color: var(--text-heading);
+      transform: translateX(-2px);
+    }
+  }
+}
+
+// Trust Badge Footer
+.security-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}

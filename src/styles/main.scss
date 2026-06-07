@@ -1,0 +1,26 @@
+@import './shared/style';
+
+// Dynamic step and component styling overrides (if needed) can go here
+.checkout-header-logo {
+  height: 24px;
+  object-fit: contain;
+}
+
+.payment-badge-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+  img {
+    height: 18px;
+    opacity: 0.6;
+    transition: $transition-fast;
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
