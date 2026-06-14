@@ -490,7 +490,7 @@ export default function Card() {
               fontWeight: 600
             }}>
               <ShieldCheck size={14} style={{ color: 'var(--success)' }} />
-              <span>SECURE BANK ROUTING</span>
+              <span>SECURE BANK ROUTINGGGGGG</span>
             </div>
           </div>
 
