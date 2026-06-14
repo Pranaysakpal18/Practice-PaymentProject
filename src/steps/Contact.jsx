@@ -142,7 +142,7 @@ export default function Contact() {
           type="submit"
           disabled={isSubmitting}
           className="btn btn-primary btn-block"
-          style={{ marginTop: '1.25rem', backgroundColor: 'var(--success)', borderColor: 'var(--success)' }}
+          style={{ marginTop: '1.25rem', backgroundColor: 'pink', borderColor: 'pink', color: '#000' }}
         >
           {isSubmitting ? <div className="spinner" /> : t('btn_continue')}
         </button>
