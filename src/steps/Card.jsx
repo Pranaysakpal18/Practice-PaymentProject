@@ -464,7 +464,7 @@ export default function Card() {
       <BaseModal
         isOpen={show3DSModal}
         onClose={() => setShow3DSModal(false)}
-        title="3D Secure Authentication"
+        title="3D Secure Authenticationnnn"
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', textAlign: 'left' }}>
           
