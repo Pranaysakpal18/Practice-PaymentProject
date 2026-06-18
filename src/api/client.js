@@ -25,7 +25,7 @@ let mockDatabase = {
     requestId: 'demo-session',
     sessionId: 'sess_99812498A',
     merchant: {
-      name: 'Demo Merchant',
+      name: 'Demo Merchant...',
       logoUrl: 'https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?w=128&auto=format&fit=crop&q=80',
       themeColor: '#2563eb', // Indigo brand color
       termsUrl: 'https://example.com/terms',
